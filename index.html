@@ -48,7 +48,7 @@ font-size:13px;color:#8b949e;white-space:nowrap;cursor:pointer;transition:.15s}
 const BASE='https://raw.githubusercontent.com/w18a/clash-sub/status/';
 const NODES=[
  {id:1,name:'东京 1号机',ip:'141.147.190.180',f:'status.json',main:true},
- {id:2,name:'东京 2号机',ip:'161.33.173.179',f:'status2.json',main:false}
+ {id:2,name:'东京 2号机',ip:'161.33.173.179',f:'status2.json',main:true}
 ];
 const $=id=>document.getElementById(id);
 let cur=1;
@@ -88,7 +88,7 @@ async function render(){
    <span>已封禁 IP</span><span>${d.banned}</span>
    <span>最近推送</span><span>${(d.last_push||'--').replace('T',' ').replace('Z',' UTC')}</span>
    <span>隧道域名</span><span class="mono">${d.domain||'--'}</span>`
-   :`<span>节点角色</span><span>备用机（未部署 Xray）</span>`}
+   :`<span>节点角色</span><span>备用节点（独立隧道 · 无公网端口）</span>`}
   </div></div>`;
   bar('b1',d.mem_pct);bar('b2',d.disk_pct);
   const dd=new Date(d.ts);
