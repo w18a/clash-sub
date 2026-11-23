@@ -45,7 +45,9 @@ font-size:13px;color:#8b949e;white-space:nowrap;cursor:pointer;transition:.15s}
 <div id="panel" class="grid"></div>
 <div class="st" id="st">加载中…</div>
 <script>
-const BASE='https://raw.githubusercontent.com/w18a/clash-sub/status/';
+// raw.githubusercontent.com 有强边缘缓存(实测 10+分钟不更新), 优先走 gh-proxy 实时回源
+const BASES=['https://gh-proxy.com/https://raw.githubusercontent.com/w18a/clash-sub/status/',
+             'https://raw.githubusercontent.com/w18a/clash-sub/status/'];
 const NODES=[
  {id:1,name:'东京 1号机',ip:'141.147.190.180',f:'status.json',main:true,svc:['xray','cfnode','subsync','srvclean'],label:['Xray','Cloudflare','订阅同步','自动清理']},
  {id:2,name:'东京 2号机',ip:'161.33.173.179',f:'status2.json',main:true,svc:['xray','cfnode','srvclean'],label:['Xray','Cloudflare','自动清理']}
@@ -63,8 +65,18 @@ function bar(id,p){const el=$(id);const w=Math.max(0,Math.min(100,p||0));
  el.querySelector('i').style.width=w+'%';
  el.classList.remove('warn','crit');
  if(p>=85)el.classList.add('crit');else if(p>=70)el.classList.add('warn');}
-async function get(f){const r=await fetch(BASE+f+'?t='+Date.now(),{cache:'no-store'});
- if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}
+async function get(f){
+ let err='';
+ for(const b of BASES){
+  try{
+   const r=await fetch(b+f+'?t='+Date.now(),{cache:'no-store'});
+   if(!r.ok){err='HTTP '+r.status;continue;}
+   const j=await r.json();
+   if(!j||!j.host){err='bad json';continue;}
+   return j;
+  }catch(e){err=e.message;}
+ }
+ throw new Error(err||'all sources failed');}
 async function render(){
  const n=NODES.find(x=>x.id===cur);
  try{
