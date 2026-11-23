@@ -5,7 +5,7 @@ log-level: info
 ipv6: false
 
 hosts:
-  'kissing-miscellaneous-customs-appropriate.trycloudflare.com': 104.16.231.132
+  'kissing-miscellaneous-customs-appropriate.trycloudflare.com': 104.16.230.132
 
 dns:
   enable: true
