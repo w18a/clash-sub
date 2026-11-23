@@ -5,7 +5,7 @@ log-level: info
 ipv6: false
 
 hosts:
-  'facilitate-granny-recognition-wagon.trycloudflare.com': 104.16.230.132
+  'facilitate-granny-recognition-wagon.trycloudflare.com': 104.16.231.132
 
 dns:
   enable: true
