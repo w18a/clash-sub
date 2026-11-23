@@ -8,7 +8,7 @@ tcp-concurrent: true
 external-controller: 127.0.0.1:9090
 
 hosts:
-  'kissing-miscellaneous-customs-appropriate.trycloudflare.com': 104.16.231.132
+  'kissing-miscellaneous-customs-appropriate.trycloudflare.com': 104.16.230.132
   'variation-relating-ipod-fairy.trycloudflare.com': 104.16.231.132
 
 dns:
