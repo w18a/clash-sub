@@ -5,9 +5,10 @@ log-level: info
 ipv6: false
 unified-delay: true
 tcp-concurrent: true
+external-controller: 127.0.0.1:9090
 
 hosts:
-  'kissing-miscellaneous-customs-appropriate.trycloudflare.com': 104.16.231.132
+  'kissing-miscellaneous-customs-appropriate.trycloudflare.com': 104.16.230.132
 
 dns:
   enable: true
@@ -29,6 +30,36 @@ dns:
     - https://1.12.12.12/dns-query
   proxy-server-nameserver:
     - https://223.5.5.5/dns-query
+
+rule-providers:
+  adblock:
+    type: http
+    behavior: domain
+    format: text
+    url: 'https://gh-proxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanAD.list'
+    path: ./ruleset/adblock.list
+    interval: 86400
+  adblock2:
+    type: http
+    behavior: domain
+    format: text
+    url: 'https://gh-proxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanProgramAD.list'
+    path: ./ruleset/adblock2.list
+    interval: 86400
+  chinadomain:
+    type: http
+    behavior: domain
+    format: text
+    url: 'https://gh-proxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaDomain.list'
+    path: ./ruleset/chinadomain.list
+    interval: 86400
+  lan:
+    type: http
+    behavior: classical
+    format: text
+    url: 'https://gh-proxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalAreaNetwork.list'
+    path: ./ruleset/lan.list
+    interval: 86400
 
 proxies:
   - name: Tokyo-Tunnel
@@ -53,9 +84,17 @@ proxy-groups:
     proxies:
       - Tokyo-Tunnel
       - DIRECT
+  - name: ADBLOCK
+    type: select
+    proxies:
+      - REJECT
+      - DIRECT
+      - PROXY
 
 rules:
-  - GEOIP,LAN,DIRECT,no-resolve
+  - RULE-SET,lan,DIRECT
+  - RULE-SET,adblock,ADBLOCK
+  - RULE-SET,adblock2,ADBLOCK
   - IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
   - IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
   - IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
@@ -103,27 +142,17 @@ rules:
   - DOMAIN-SUFFIX,cloudflare.com,PROXY
   - DOMAIN-SUFFIX,trycloudflare.com,PROXY
   - DOMAIN-KEYWORD,trycloudflare,PROXY
+  - RULE-SET,chinadomain,DIRECT
   - DOMAIN-SUFFIX,cn,DIRECT
   - DOMAIN-SUFFIX,qq.com,DIRECT
   - DOMAIN-SUFFIX,tencent.com,DIRECT
   - DOMAIN-SUFFIX,aliyun.com,DIRECT
-  - DOMAIN-SUFFIX,alicdn.com,DIRECT
   - DOMAIN-SUFFIX,taobao.com,DIRECT
-  - DOMAIN-SUFFIX,tmall.com,DIRECT
-  - DOMAIN-SUFFIX,alipay.com,DIRECT
   - DOMAIN-SUFFIX,jd.com,DIRECT
   - DOMAIN-SUFFIX,bilibili.com,DIRECT
-  - DOMAIN-SUFFIX,hdslb.com,DIRECT
   - DOMAIN-SUFFIX,baidu.com,DIRECT
-  - DOMAIN-SUFFIX,bdstatic.com,DIRECT
-  - DOMAIN-SUFFIX,163.com,DIRECT
-  - DOMAIN-SUFFIX,126.net,DIRECT
   - DOMAIN-SUFFIX,bytedance.com,DIRECT
   - DOMAIN-SUFFIX,douyin.com,DIRECT
-  - DOMAIN-SUFFIX,xiaomi.com,DIRECT
-  - DOMAIN-SUFFIX,huawei.com,DIRECT
-  - DOMAIN-SUFFIX,meituan.com,DIRECT
-  - DOMAIN-SUFFIX,pinduoduo.com,DIRECT
   - DOMAIN-SUFFIX,zhihu.com,DIRECT
   - DOMAIN-SUFFIX,weibo.com,DIRECT
   - GEOIP,CN,DIRECT
