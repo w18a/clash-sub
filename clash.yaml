@@ -9,6 +9,7 @@ external-controller: 127.0.0.1:9090
 
 hosts:
   'kissing-miscellaneous-customs-appropriate.trycloudflare.com': 104.16.231.132
+  'variation-relating-ipod-fairy.trycloudflare.com': 104.16.231.132
 
 dns:
   enable: true
@@ -22,6 +23,7 @@ dns:
     - '+.msftconnecttest.com'
     - '+.msftncsi.com'
     - 'kissing-miscellaneous-customs-appropriate.trycloudflare.com'
+    - 'variation-relating-ipod-fairy.trycloudflare.com'
   default-nameserver:
     - 223.5.5.5
     - 119.29.29.29
@@ -78,12 +80,38 @@ proxies:
       headers:
         Host: kissing-miscellaneous-customs-appropriate.trycloudflare.com
 
+  - name: Tokyo-2
+    type: vless
+    server: variation-relating-ipod-fairy.trycloudflare.com
+    port: 443
+    uuid: 58581eef-b947-4781-98b2-7b8d81ff9e7a
+    network: ws
+    tls: true
+    udp: false
+    servername: variation-relating-ipod-fairy.trycloudflare.com
+    client-fingerprint: chrome
+    skip-cert-verify: false
+    ws-opts:
+      path: /n2ws
+      headers:
+        Host: variation-relating-ipod-fairy.trycloudflare.com
+
 proxy-groups:
   - name: PROXY
     type: select
     proxies:
+      - AUTO
       - Tokyo-Tunnel
+      - Tokyo-2
       - DIRECT
+  - name: AUTO
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 300
+    tolerance: 50
+    proxies:
+      - Tokyo-Tunnel
+      - Tokyo-2
   - name: ADBLOCK
     type: select
     proxies:
