@@ -43,6 +43,8 @@ font-size:13px;color:#8b949e;white-space:nowrap;cursor:pointer;transition:.15s}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:12.5px}
 .kv span:nth-child(odd){color:#8b949e}
 .kv span:nth-child(even){text-align:right;font-variant-numeric:tabular-nums;word-break:break-all}
+.kv span.warn{color:#d29922!important}
+.kv span.crit{color:#f85149!important}
 .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:#58a6ff}
 .st{font-size:11px;color:#6b7785;text-align:center;margin-top:16px}
 .err{color:#f85149;font-size:12px;text-align:center;padding:10px}
@@ -60,6 +62,10 @@ const NODES=[
  {id:2,name:'东京 2号机',ip:'161.33.173.179',f:'status2.json',main:true,svc:['xray','cfnode','srvclean'],label:['Xray','Cloudflare','自动清理']}
 ];
 const $=id=>document.getElementById(id);
+const h=(d,k)=> (d.health&&d.health[k]!=null) ? d.health[k] : (d[k]!=null?d[k]:'--');
+const atkCls=d=>{const v=(d.health&&d.health.ssh_invalid_24h)||0;
+ return v>=500?'crit':v>=100?'warn':'';};
+
 let cur=1;
 function up(s){const d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60);
  return d>0?d+'天'+h+'时':h>0?h+'时'+m+'分':m+'分'}
@@ -101,12 +107,17 @@ async function render(){
    <span>负载</span><span>${d.load}</span>
    <span>运行时间</span><span>${up(d.uptime)}</span>
    <span>进程 / 连接</span><span>${d.procs} / ${d.conns}</span>
+   <span>代理连接</span><span>${h(d,'conn_proxy')} 条</span>
    <span>拥塞控制</span><span>${d.bbr}</span>
-   ${n.main?`<span>隧道重启</span><span>${d.cf_restarts} 次</span>
-   <span>已封禁 IP</span><span>${d.banned}</span>
+   <span>隧道重启</span><span>${d.cf_restarts} 次</span>
+   <span>当前封禁</span><span>${h(d,'banned_now')} 个</span>
+   <span>累计封禁</span><span>${h(d,'banned_all')} 个</span>
+   <span>SSH 攻击(24h)</span><span class="${atkCls(d)}">${h(d,'ssh_invalid_24h')} 次</span>
+   <span>攻击源(24h)</span><span>${h(d,'attackers_24h')} 个 IP</span>
+   <span>f2b 失败计数</span><span>${h(d,'f2b_total')}</span>
    <span>最近推送</span><span>${(d.last_push||'--').replace('T',' ').replace('Z',' UTC')}</span>
-   <span>隧道域名</span><span class="mono">${d.domain||'--'}</span>`
-   :`<span>节点角色</span><span>备用节点（独立隧道 · 无公网端口）</span>`}
+   <span>隧道域名</span><span class="mono">${d.domain||'--'}</span>
+   <span>节点角色</span><span>${n.main?'主力节点（8880 公网开放）':'备用节点（仅回环）'}</span>
   </div></div>`;
   bar('b1',d.mem_pct);bar('b2',d.disk_pct);
   const dd=new Date(d.ts);
