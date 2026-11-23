@@ -47,8 +47,8 @@ font-size:13px;color:#8b949e;white-space:nowrap;cursor:pointer;transition:.15s}
 <script>
 const BASE='https://raw.githubusercontent.com/w18a/clash-sub/status/';
 const NODES=[
- {id:1,name:'东京 1号机',ip:'141.147.190.180',f:'status.json',main:true},
- {id:2,name:'东京 2号机',ip:'161.33.173.179',f:'status2.json',main:true}
+ {id:1,name:'东京 1号机',ip:'141.147.190.180',f:'status.json',main:true,svc:['xray','cfnode','subsync','srvclean'],label:['Xray','Cloudflare','订阅同步','自动清理']},
+ {id:2,name:'东京 2号机',ip:'161.33.173.179',f:'status2.json',main:true,svc:['xray','cfnode','srvclean'],label:['Xray','Cloudflare','自动清理']}
 ];
 const $=id=>document.getElementById(id);
 let cur=1;
@@ -71,8 +71,7 @@ async function render(){
   const d=await get(n.f);
   $('panel').innerHTML=`
   <div class="card"><div class="svc">
-   ${svc('Xray',d.xray,n.main)}${svc('Cloudflare',d.cfnode,n.main)}
-   ${svc('订阅同步',d.subsync,n.main)}${svc('自动清理',d.srvclean,n.main)}
+   ${n.svc.map((k,i)=>svc(n.label[i],d[k],n.main)).join('')}
   </div></div>
   <div class="card"><div class="lb"><span>内存</span><b>${d.mem_used} / ${d.mem_total} MB (${d.mem_pct}%)</b></div>
    <div class="bar m" id="b1"><i></i></div></div>
