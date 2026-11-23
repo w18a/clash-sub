@@ -5,7 +5,7 @@ log-level: info
 ipv6: false
 
 hosts:
-  'facilitate-granny-recognition-wagon.trycloudflare.com': 104.16.231.132
+  'kissing-miscellaneous-customs-appropriate.trycloudflare.com': 104.16.230.132
 
 dns:
   enable: true
@@ -16,7 +16,7 @@ dns:
   fake-ip-filter:
     - '*.lan'
     - '*.local'
-    - 'facilitate-granny-recognition-wagon.trycloudflare.com'
+    - 'kissing-miscellaneous-customs-appropriate.trycloudflare.com'
   nameserver:
     - https://1.1.1.1/dns-query
     - https://8.8.8.8/dns-query
@@ -24,19 +24,19 @@ dns:
 proxies:
   - name: Tokyo-Tunnel
     type: vless
-    server: facilitate-granny-recognition-wagon.trycloudflare.com
+    server: kissing-miscellaneous-customs-appropriate.trycloudflare.com
     port: 443
     uuid: c2f24874-f9a7-4009-9983-de40767f212c
     network: ws
     tls: true
     udp: false
-    servername: facilitate-granny-recognition-wagon.trycloudflare.com
+    servername: kissing-miscellaneous-customs-appropriate.trycloudflare.com
     client-fingerprint: chrome
     skip-cert-verify: false
     ws-opts:
       path: /ws
       headers:
-        Host: facilitate-granny-recognition-wagon.trycloudflare.com
+        Host: kissing-miscellaneous-customs-appropriate.trycloudflare.com
 
 proxy-groups:
   - name: PROXY
