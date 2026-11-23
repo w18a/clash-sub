@@ -1,0 +1,69 @@
+mixed-port: 7890
+allow-lan: false
+mode: rule
+log-level: info
+ipv6: false
+
+hosts:
+  'facilitate-granny-recognition-wagon.trycloudflare.com': 104.16.231.132
+
+dns:
+  enable: true
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  use-hosts: true
+  fake-ip-filter:
+    - '*.lan'
+    - '*.local'
+    - 'facilitate-granny-recognition-wagon.trycloudflare.com'
+  nameserver:
+    - https://1.1.1.1/dns-query
+    - https://8.8.8.8/dns-query
+
+proxies:
+  - name: Tokyo-Tunnel
+    type: vless
+    server: facilitate-granny-recognition-wagon.trycloudflare.com
+    port: 443
+    uuid: c2f24874-f9a7-4009-9983-de40767f212c
+    network: ws
+    tls: true
+    udp: false
+    servername: facilitate-granny-recognition-wagon.trycloudflare.com
+    client-fingerprint: chrome
+    skip-cert-verify: false
+    ws-opts:
+      path: /ws
+      headers:
+        Host: facilitate-granny-recognition-wagon.trycloudflare.com
+
+proxy-groups:
+  - name: PROXY
+    type: select
+    proxies:
+      - Tokyo-Tunnel
+      - DIRECT
+
+rules:
+  - GEOIP,LAN,DIRECT,no-resolve
+  - IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
+  - IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
+  - DOMAIN-SUFFIX,cn,DIRECT
+  - DOMAIN-SUFFIX,qq.com,DIRECT
+  - DOMAIN-SUFFIX,aliyun.com,DIRECT
+  - DOMAIN-SUFFIX,taobao.com,DIRECT
+  - DOMAIN-SUFFIX,jd.com,DIRECT
+  - DOMAIN-SUFFIX,bilibili.com,DIRECT
+  - DOMAIN-SUFFIX,baidu.com,DIRECT
+  - DOMAIN-SUFFIX,google.com,PROXY
+  - DOMAIN-SUFFIX,googleapis.com,PROXY
+  - DOMAIN-SUFFIX,gstatic.com,PROXY
+  - DOMAIN-SUFFIX,youtube.com,PROXY
+  - DOMAIN-SUFFIX,googlevideo.com,PROXY
+  - DOMAIN-SUFFIX,github.com,PROXY
+  - DOMAIN-SUFFIX,chatgpt.com,PROXY
+  - DOMAIN-SUFFIX,openai.com,PROXY
+  - DOMAIN-SUFFIX,telegram.org,PROXY
+  - MATCH,PROXY
