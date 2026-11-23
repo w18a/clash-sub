@@ -45,6 +45,7 @@ font-size:13px;color:#8b949e;white-space:nowrap;cursor:pointer;transition:.15s}
 .kv span:nth-child(even){text-align:right;font-variant-numeric:tabular-nums;word-break:break-all}
 .kv span.warn{color:#d29922!important}
 .kv span.crit{color:#f85149!important}
+.kv span.sm{font-size:10.5px;line-height:1.35}
 .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:#58a6ff}
 .st{font-size:11px;color:#6b7785;text-align:center;margin-top:16px}
 .err{color:#f85149;font-size:12px;text-align:center;padding:10px}
@@ -115,6 +116,8 @@ async function render(){
    <span>SSH 攻击(24h)</span><span class="${atkCls(d)}">${h(d,'ssh_invalid_24h')} 次</span>
    <span>攻击源(24h)</span><span>${h(d,'attackers_24h')} 个 IP</span>
    <span>f2b 失败计数</span><span>${h(d,'f2b_total')}</span>
+   <span>攻击源 TOP5</span><span class="mono sm">${h(d,'top_ips')||'--'}</span>
+   <span>尝试用户名 TOP3</span><span class="mono sm">${h(d,'top_users')||'--'}</span>
    <span>最近推送</span><span>${(d.last_push||'--').replace('T',' ').replace('Z',' UTC')}</span>
    <span>隧道域名</span><span class="mono">${d.domain||'--'}</span>
    <span>节点角色</span><span>${n.main?'主力节点（8880 公网开放）':'备用节点（仅回环）'}</span>
