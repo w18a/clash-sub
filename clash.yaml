@@ -9,7 +9,7 @@ external-controller: 127.0.0.1:9090
 
 hosts:
   'integrating-fridge-serving-wish.trycloudflare.com': 104.16.230.132
-  'variation-relating-ipod-fairy.trycloudflare.com': 104.16.231.132
+  'mold-fought-process-creation.trycloudflare.com': 104.16.231.132
 
 dns:
   enable: true
@@ -23,7 +23,7 @@ dns:
     - '+.msftconnecttest.com'
     - '+.msftncsi.com'
     - 'integrating-fridge-serving-wish.trycloudflare.com'
-    - 'variation-relating-ipod-fairy.trycloudflare.com'
+    - 'mold-fought-process-creation.trycloudflare.com'
   default-nameserver:
     - 223.5.5.5
     - 119.29.29.29
@@ -82,19 +82,19 @@ proxies:
 
   - name: Tokyo-2
     type: vless
-    server: variation-relating-ipod-fairy.trycloudflare.com
+    server: mold-fought-process-creation.trycloudflare.com
     port: 443
     uuid: 58581eef-b947-4781-98b2-7b8d81ff9e7a
     network: ws
     tls: true
     udp: false
-    servername: variation-relating-ipod-fairy.trycloudflare.com
+    servername: mold-fought-process-creation.trycloudflare.com
     client-fingerprint: chrome
     skip-cert-verify: false
     ws-opts:
       path: /n2ws
       headers:
-        Host: variation-relating-ipod-fairy.trycloudflare.com
+        Host: mold-fought-process-creation.trycloudflare.com
 
 proxy-groups:
   - name: PROXY
