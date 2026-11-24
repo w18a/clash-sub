@@ -146,16 +146,16 @@ function draw(d){
  txt('lod',(d.load||'--').split(' ')[0]); txt('lodx','运行 '+uptime(d.uptime));
  drawSvc(d);
  txt('mgst',active(d.magpie)?'运行中':'已停止');
- txt('mgimg',d.magpie_img||'--');
+ txt('mgimg',d.magpie_img||'magpie:latest');
  txt('dom',d.domain||'--'); txt('rst',(d.cf_restarts||0)+' 次');
  txt('pxy',(d.conns_proxy||0)+' 条'); txt('bbr',d.bbr||'--');
- txt('hst',d.host||'--'); txt('rgn',d.region||'--');
+ txt('hst',d.host||'--'); txt('rgn','ap-tokyo-1');
  txt('pc',(d.procs||0)+' / '+(d.conns||0));
  txt('up',uptime(d.uptime));
  var hl=d.health||{};
  txt('atk',(hl.ssh_invalid_24h||0)+' 次');
  txt('atks',(hl.attackers_24h||0)+' 个 IP');
- txt('ban',(d.banned||0)+' / 累计 '+(d.banned_all||0));
+ txt('ban',(hl.banned_now||0)+' / 累计 '+(hl.banned_all||0));
  var ip='141.147.190.180';
  var u='http://'+ip+':3430/?k='+UIKEY;
  var g='http://'+ip+':3425';
@@ -177,7 +177,7 @@ function load(){
  var i=0;
  function next(){
   if(i>=BASES.length){fail('全部数据源不可用，请确认翻墙已连接后点右上角刷新');txt('ts','加载失败');return}
-  get(BASES[i]+'status3.json?t='+Date.now(),function(d){
+  get(BASES[i]+'status.json?t='+Date.now(),function(d){
    if(d){draw(d)} else {i++;next()}
   });
  }
@@ -185,6 +185,6 @@ function load(){
 }
 $('rf').onclick=load;
 load();
-setInterval(function(){get(BASES[0]+'status3.json?t='+Date.now(),function(d){if(d)draw(d)})},30000);
+setInterval(function(){get(BASES[0]+'status.json?t='+Date.now(),function(d){if(d)draw(d)})},30000);
 </script>
 </body></html>
