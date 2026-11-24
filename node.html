@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0f14">
+<title>Tokyo Nodes</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;padding:14px 13px 34px;background:#0b0f14;color:#e6edf3;
+font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+.hd{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px}
+h1{font-size:20px;margin:0;font-weight:600}
+.ts{font-size:11px;color:#6b7785}
+.sub{font-size:12px;color:#6b7785;margin-bottom:12px}
+.btn{padding:6px 14px;border-radius:8px;background:#131a22;border:1px solid #1e2733;color:#8b949e;font-size:12px;cursor:pointer}
+.tiles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:12px}
+.tile{background:#131a22;border:1px solid #1e2733;border-radius:11px;padding:11px 10px}
+.tile .k{font-size:11px;color:#6b7785;margin-bottom:5px}
+.tile .v{font-size:19px;font-weight:600;font-variant-numeric:tabular-nums;color:#e6edf3}
+.tile .x{font-size:10px;color:#6b7785;margin-top:2px}
+.sec{background:#131a22;border:1px solid #1e2733;border-radius:12px;padding:13px 14px;margin-bottom:11px}
+.sec h2{font-size:12px;color:#6b7785;margin:0 0 11px;font-weight:600;border-left:3px solid #1f6feb;padding-left:8px}
+.svc{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.item{display:flex;align-items:center;gap:8px;font-size:13px;color:#8b949e;background:#0e141b;border:1px solid #1e2733;border-radius:8px;padding:7px 10px}
+.dot{width:8px;height:8px;border-radius:50%;background:#3a4652;flex:0 0 8px}
+.ok{color:#e6edf3;border-color:#23863655}.ok .dot{background:#3fb950;box-shadow:0 0 8px #3fb95088}
+.bad{color:#f85149;border-color:#f8514955}.bad .dot{background:#f85149;box-shadow:0 0 8px #f8514988}
+.row{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px solid #1a222c;font-size:13px}
+.row:last-child{border-bottom:0;padding-bottom:0}
+.row .k{color:#8b949e}
+.row .v{color:#e6edf3;font-weight:500;font-variant-numeric:tabular-nums;text-align:right;max-width:62%;word-break:break-all}
+.row .v.mono{font-size:11px;color:#58a6ff}
+.lnk{display:block;background:#131a22;border:1px solid #1f6feb55;border-radius:10px;padding:12px 14px;margin-bottom:9px;color:#58a6ff;text-decoration:none;font-size:13px}
+.err{background:#f8514922;border:1px solid #f85149;border-radius:10px;padding:11px 13px;color:#f85149;font-size:12px;margin-bottom:11px;display:none}
+.tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:5px;background:#1f6feb22;color:#58a6ff;margin-left:6px;vertical-align:middle}
+.na{color:#6b7785;font-size:12px;padding:8px 0}
+.big{font-size:15px;font-weight:600;color:#e6edf3}
+</style></head><body>
+<div class="hd"><h1 id="title">节点<span class="tag" id="region">--</span></h1><button class="btn" id="rf">刷新</button></div>
+<div class="sub" id="ts">正在连接…</div>
+<div class="err" id="err"></div>
+<div class="tiles">
+  <div class="tile"><div class="k">内存</div><div class="v" id="mem">--</div><div class="x" id="memx">--</div></div>
+  <div class="tile"><div class="k">磁盘</div><div class="v" id="dsk">--</div><div class="x" id="dskx">--</div></div>
+  <div class="tile"><div class="k">负载</div><div class="v" id="lod">--</div><div class="x" id="lodx">--</div></div>
+</div>
+<div class="sec"><h2>服务状态</h2><div class="svc" id="svc"></div></div>
+<div class="sec" id="magsec"><h2>Magpie AI 网关</h2><div id="magbody"></div></div>
+<div class="sec"><h2>VPN 隧道</h2>
+  <div class="row"><span class="k">域名</span><span class="v mono" id="dom">--</span></div>
+  <div class="row"><span class="k">隧道重启</span><span class="v" id="rst">--</span></div>
+  <div class="row"><span class="k">代理连接</span><span class="v" id="pxy">--</span></div>
+  <div class="row"><span class="k">拥塞控制</span><span class="v" id="bbr">--</span></div>
+</div>
+<div class="sec"><h2>运行信息</h2>
+  <div class="row"><span class="k">主机</span><span class="v" id="hst">--</span></div>
+  <div class="row"><span class="k">进程 / 连接</span><span class="v" id="pc">--</span></div>
+  <div class="row"><span class="k">运行时长</span><span class="v" id="up">--</span></div>
+</div>
+<div class="sec"><h2>安全</h2>
+  <div class="row"><span class="k">SSH 攻击 (24h)</span><span class="v" id="atk">--</span></div>
+  <div class="row"><span class="k">攻击源</span><span class="v" id="atks">--</span></div>
+  <div class="row"><span class="k">当前封禁</span><span class="v" id="ban">--</span></div>
+</div>
+<script>
+var CFG={
+ '1':{file:'status.json',name:'东京 1 号机',region:'主力·ap-tokyo-1',ip:'141.147.190.180',mag:true},
+ '2':{file:'status2.json',name:'东京 2 号机',region:'备用·ap-tokyo-1',ip:'161.33.173.179',mag:false},
+ '3':{file:'status3.json',name:'Ashburn',region:'AI 网关·us-ashburn-1',ip:'150.136.55.249',mag:true}
+};
+var UIKEY='8ec91a154b2d5dab67dee365798d1e39';
+var q=new URLSearchParams(location.search).get('s')||'1';
+var C=CFG[q]||CFG['1'];
+var BASE=['https://gh-proxy.com/https://raw.githubusercontent.com/w18a/clash-sub/status/',
+          'https://raw.githubusercontent.com/w18a/clash-sub/status/'];
+function $(i){return document.getElementById(i)}
+function txt(i,v){var e=$(i);if(e)e.textContent=v}
+function active(s){return s==='active'}
+function uptime(s){if(!s||s<0)return '--';var d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60);if(d>0)return d+'天'+h+'时';if(h>0)return h+'时'+m+'分';return m+'分'}
+function svc(d){
+ var items=[['Xray',d.xray],['CF 隧道',d.cfnode],['Magpie',d.magpie],['清理',d.srvclean]];
+ var h='';for(var i=0;i<items.length;i++){var ok=active(items[i][1]);
+  if(items[i][0]==='Magpie'&&!C.mag){h+='<div class="item"><span class="dot"></span><span>Magpie</span></div>';continue}
+  h+='<div class="item '+(ok?'ok':'bad')+'"><span class="dot"></span><span>'+items[i][0]+'</span></div>'}
+ $('svc').innerHTML=h;
+}
+function magpie(d){
+ var b=$('magbody');
+ if(!C.mag){b.innerHTML='<div class="na">该节点未部署 Magpie 网关</div>';return}
+ var on=active(d.magpie);
+ var u='http://'+C.ip+':3430/?k='+UIKEY, g='http://'+C.ip+':3425';
+ b.innerHTML='<div class="row"><span class="k">容器状态</span><span class="v">'+(on?'运行中':'已停止')+'</span></div>'+
+  '<div class="row"><span class="k">镜像</span><span class="v mono">'+(d.magpie_img||'magpie:latest')+'</span></div>'+
+  '<a class="lnk" href="'+u+'" target="_blank"><div class="big">Magpie Web UI →</div><div class="row"><span class="v mono">'+u+'</span></div></a>'+
+  '<a class="lnk" href="'+g+'" target="_blank"><div class="big">Magpie 网关 API →</div><div class="row"><span class="v mono">'+g+'</span></div></a>';
+}
+function draw(d){
+ txt('ts','数据 '+d.ts+' · '+new Date().toLocaleTimeString('zh-CN'));
+ txt('mem',d.mem_pct+'%');txt('memx',d.mem_used+'/'+d.mem_total+'M');
+ txt('dsk',d.disk_pct+'%');txt('dskx',d.disk_used+'/'+d.disk_total+'M');
+ txt('lod',(d.load||'--').split(' ')[0]);txt('lodx','运行 '+uptime(d.uptime));
+ svc(d);magpie(d);
+ txt('dom',d.domain||'--');txt('rst',(d.cf_restarts||0)+' 次');
+ txt('pxy',(d.conns_proxy||0)+' 条');txt('bbr',d.bbr||'--');
+ txt('hst',d.host||'--');txt('pc',(d.procs||0)+' / '+(d.conns||0));txt('up',uptime(d.uptime));
+ var hl=d.health||{};
+ txt('atk',(hl.ssh_invalid_24h||0)+' 次');txt('atks',(hl.attackers_24h||0)+' 个 IP');
+ txt('ban',(hl.banned_now||0)+' / 累计 '+(hl.banned_all||0));
+ $('err').style.display='none';
+}
+function get(url,cb){var x=new XMLHttpRequest();x.open('GET',url,true);x.timeout=12000;
+ x.onload=function(){if(x.status===200){try{cb(JSON.parse(x.responseText))}catch(e){cb(null)}}else cb(null)};
+ x.onerror=x.ontimeout=function(){cb(null)};x.send()}
+function load(){txt('ts','正在连接…');var i=0;
+ (function next(){if(i>=BASE.length){$('err').style.display='block';$('err').textContent='⚠️ 数据源不可用';txt('ts','加载失败');return}
+  get(BASE[i]+C.file+'?t='+Date.now(),function(d){if(d)draw(d);else{i++;next()}})})()}
+document.title=C.name;
+$('title').childNodes[0].nodeValue=C.name+' ';
+txt('region',C.region);
+$('rf').onclick=load;load();
+setInterval(function(){get(BASE[0]+C.file+'?t='+Date.now(),function(d){if(d)draw(d)})},30000);
+</script></body></html>
