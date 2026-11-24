@@ -8,7 +8,7 @@ tcp-concurrent: true
 external-controller: 127.0.0.1:9090
 
 hosts:
-  'kissing-miscellaneous-customs-appropriate.trycloudflare.com': 104.16.231.132
+  'integrating-fridge-serving-wish.trycloudflare.com': 104.16.230.132
   'variation-relating-ipod-fairy.trycloudflare.com': 104.16.231.132
 
 dns:
@@ -22,7 +22,7 @@ dns:
     - '*.local'
     - '+.msftconnecttest.com'
     - '+.msftncsi.com'
-    - 'kissing-miscellaneous-customs-appropriate.trycloudflare.com'
+    - 'integrating-fridge-serving-wish.trycloudflare.com'
     - 'variation-relating-ipod-fairy.trycloudflare.com'
   default-nameserver:
     - 223.5.5.5
@@ -66,19 +66,19 @@ rule-providers:
 proxies:
   - name: Tokyo-Tunnel
     type: vless
-    server: kissing-miscellaneous-customs-appropriate.trycloudflare.com
+    server: integrating-fridge-serving-wish.trycloudflare.com
     port: 443
     uuid: c2f24874-f9a7-4009-9983-de40767f212c
     network: ws
     tls: true
     udp: false
-    servername: kissing-miscellaneous-customs-appropriate.trycloudflare.com
+    servername: integrating-fridge-serving-wish.trycloudflare.com
     client-fingerprint: chrome
     skip-cert-verify: false
     ws-opts:
       path: /ws
       headers:
-        Host: kissing-miscellaneous-customs-appropriate.trycloudflare.com
+        Host: integrating-fridge-serving-wish.trycloudflare.com
 
   - name: Tokyo-2
     type: vless
