@@ -8,8 +8,9 @@ tcp-concurrent: true
 external-controller: 127.0.0.1:9090
 
 hosts:
-  'integrating-fridge-serving-wish.trycloudflare.com': 104.16.230.132
+  'integrating-fridge-serving-wish.trycloudflare.com': 104.16.231.132
   'mold-fought-process-creation.trycloudflare.com': 104.16.230.132
+  'roger-gather-visit-programme.trycloudflare.com': 104.16.230.132
 
 dns:
   enable: true
@@ -24,6 +25,7 @@ dns:
     - '+.msftncsi.com'
     - 'integrating-fridge-serving-wish.trycloudflare.com'
     - 'mold-fought-process-creation.trycloudflare.com'
+    - 'roger-gather-visit-programme.trycloudflare.com'
   default-nameserver:
     - 223.5.5.5
     - 119.29.29.29
@@ -96,6 +98,22 @@ proxies:
       headers:
         Host: mold-fought-process-creation.trycloudflare.com
 
+  - name: Ashburn
+    type: vless
+    server: roger-gather-visit-programme.trycloudflare.com
+    port: 443
+    uuid: a60c57ab-2cc1-4390-add0-888a130c63ca
+    network: ws
+    tls: true
+    udp: false
+    servername: roger-gather-visit-programme.trycloudflare.com
+    client-fingerprint: chrome
+    skip-cert-verify: false
+    ws-opts:
+      path: /ashws
+      headers:
+        Host: roger-gather-visit-programme.trycloudflare.com
+
 proxy-groups:
   - name: PROXY
     type: select
@@ -103,6 +121,7 @@ proxy-groups:
       - AUTO
       - Tokyo-Tunnel
       - Tokyo-2
+      - Ashburn
       - DIRECT
   - name: AUTO
     type: url-test
@@ -112,6 +131,7 @@ proxy-groups:
     proxies:
       - Tokyo-Tunnel
       - Tokyo-2
+      - Ashburn
   - name: ADBLOCK
     type: select
     proxies:
