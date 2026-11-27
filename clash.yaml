@@ -8,8 +8,8 @@ tcp-concurrent: true
 external-controller: 127.0.0.1:9090
 
 hosts:
-  'integrating-fridge-serving-wish.trycloudflare.com': 104.16.230.132
-  'mold-fought-process-creation.trycloudflare.com': 104.16.230.132
+  'integrating-fridge-serving-wish.trycloudflare.com': 104.16.231.132
+  'mold-fought-process-creation.trycloudflare.com': 104.16.231.132
   'roger-gather-visit-programme.trycloudflare.com': 104.16.231.132
 
 dns:
