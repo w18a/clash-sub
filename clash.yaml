@@ -10,7 +10,7 @@ external-controller: 127.0.0.1:9090
 hosts:
   'integrating-fridge-serving-wish.trycloudflare.com': 104.16.231.132
   'mold-fought-process-creation.trycloudflare.com': 104.16.230.132
-  'roger-gather-visit-programme.trycloudflare.com': 104.16.231.132
+  'childhood-malpractice-winds-groove.trycloudflare.com.trycloudflare.com': 104.16.231.132
 
 dns:
   enable: true
@@ -25,7 +25,7 @@ dns:
     - '+.msftncsi.com'
     - 'integrating-fridge-serving-wish.trycloudflare.com'
     - 'mold-fought-process-creation.trycloudflare.com'
-    - 'roger-gather-visit-programme.trycloudflare.com'
+    - 'childhood-malpractice-winds-groove.trycloudflare.com.trycloudflare.com'
   default-nameserver:
     - 223.5.5.5
     - 119.29.29.29
@@ -100,19 +100,19 @@ proxies:
 
   - name: Ashburn
     type: vless
-    server: roger-gather-visit-programme.trycloudflare.com
+    server: childhood-malpractice-winds-groove.trycloudflare.com.trycloudflare.com
     port: 443
     uuid: a60c57ab-2cc1-4390-add0-888a130c63ca
     network: ws
     tls: true
     udp: false
-    servername: roger-gather-visit-programme.trycloudflare.com
+    servername: childhood-malpractice-winds-groove.trycloudflare.com.trycloudflare.com
     client-fingerprint: chrome
     skip-cert-verify: false
     ws-opts:
       path: /ashws
       headers:
-        Host: roger-gather-visit-programme.trycloudflare.com
+        Host: childhood-malpractice-winds-groove.trycloudflare.com.trycloudflare.com
 
 proxy-groups:
   - name: PROXY
